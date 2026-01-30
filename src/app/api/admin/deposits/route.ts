@@ -55,7 +55,7 @@ export async function PUT(request: NextRequest) {
       return apiResponse.error('Unauthorized', 403);
     }
 
-    const { depositId, action, amount } = await request.json();
+    const { depositId, action } = await request.json();
 
     if (!depositId || !action) {
       return apiResponse.error('Missing required fields', 400);

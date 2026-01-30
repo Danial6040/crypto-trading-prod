@@ -6,10 +6,8 @@ import {
   Users,
   TrendingDown,
   TrendingUp,
-  Settings,
   LogOut,
   Check,
-  X,
 } from 'lucide-react';
 
 interface User {

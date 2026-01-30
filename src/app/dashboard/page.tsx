@@ -15,8 +15,6 @@ export default function Dashboard() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const [depositTab, setDepositTab] = useState(false);
-  const [withdrawTab, setWithdrawTab] = useState(false);
   const [txHash, setTxHash] = useState('');
   const [withdrawAmount, setWithdrawAmount] = useState('');
   const [withdrawAddress, setWithdrawAddress] = useState('');

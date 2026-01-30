@@ -1,0 +1,12 @@
+.vercelignore
+.env.local
+.env.production
+node_modules
+.git
+README.md
+DEPLOYMENT.md
+setup.sh
+init-db.sh
+*.log
+.DS_Store
+prisma/dev.db*

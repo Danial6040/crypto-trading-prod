@@ -1,0 +1,82 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  username  String   @unique
+  balance   Float    @default(0)
+  isAdmin   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  deposits      Deposit[]
+  withdrawals   Withdrawal[]
+  transactions  Transaction[]
+
+  @@index([email])
+  @@index([username])
+}
+
+model Deposit {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amount        Float
+  txHash        String   @unique
+  status        String   @default("pending") // pending, confirmed
+  confirmedAt   DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([userId])
+  @@index([status])
+}
+
+model Withdrawal {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amount          Float
+  walletAddress   String
+  txHash          String?  @unique
+  status          String   @default("pending") // pending, approved, sent, cancelled
+  approvedBy      String?
+  approvedAt      DateTime?
+  sentAt          DateTime?
+  requestedAt     DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId])
+  @@index([status])
+}
+
+model Transaction {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String   // deposit, withdrawal, adjustment
+  amount    Float
+  notes     String?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([type])
+}
+
+model Config {
+  id              String   @id @default(cuid())
+  depositAddress  String   @unique
+  adminWallet     String
+  minDeposit      Float    @default(0.001)
+  minWithdrawal   Float    @default(0.001)
+  maxWithdrawal   Float    @default(100)
+  updatedAt       DateTime @updatedAt
+}
